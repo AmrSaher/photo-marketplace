@@ -1,0 +1,11 @@
+<h1>Photos for Sale</h1>
+<ul>
+    <% photos.forEach(photo => { %>
+    <li>
+        <h2><%= photo.title %></h2>
+        <img src="/<%= photo.imagePath %>" alt="<%= photo.title %>" />
+        <p><%= photo.description %></p>
+        <p>Price: $<%= photo.price %></p>
+    </li>
+    <% }) %>
+</ul>

@@ -1,9 +1,9 @@
-<h1>Photos for Sale</h1>
+<h1>Photos for Sale (<a href="/wallet">Wallet</a>)----------------<a href="/logout">Logout</a>----------------<a href="/photos/upload">Sell photo</a>----------------<a href="/photos/my-photos">My Photos</a></a></h1>
 <ul>
     <% photos.forEach(photo => { %>
     <li>
-        <h2><%= photo.title %></h2>
-        <img src="/<%= photo.imagePath %>" alt="<%= photo.title %>" />
+        <h2><a href="/photos/<%= photo.id %>"><%= photo.title %></a></h2>
+        <img oncontextmenu="return false;" style="-webkit-user-drag: none; pointer-events: none; user-drag: none;" src="/<%= photo.watermarkImagePath %>" width="300" alt="<%= photo.title %>" />
         <p><%= photo.description %></p>
         <p>Price: $<%= photo.price %></p>
     </li>

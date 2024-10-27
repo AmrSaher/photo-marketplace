@@ -1,0 +1,33 @@
+<a href="/photos">< Back</a>
+<p><%= photo.title %></p>
+<p><%= photo.price %></p>
+<img
+    src="/<%= photo.watermarkImagePath %>"
+    width="300"
+    oncontextmenu="return false;"
+    alt="<%= photo.title %>"
+/>
+
+<% if (!photo.owners.includes(user.id)) { %>
+<button id="buy-photo-btn">Buy photo</button>
+<script>
+    document.querySelector("#buy-photo-btn").addEventListener("click", () => {
+        if (confirm("Are you sure that you want to buy this photo ?")) {
+            fetch("/photos/buy-photo", {
+                method: "post",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    photoId: "<%= photo.id %>",
+                }),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log(res);
+                    location.href = "/photos/<%= photo.id %>";
+                });
+        }
+    });
+</script>
+<% } %>

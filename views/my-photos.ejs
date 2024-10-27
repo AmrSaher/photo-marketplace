@@ -1,0 +1,12 @@
+<a href="/photos">< Back</a>
+<h1>My Photos</h1>
+<ul>
+    <% photos.forEach(photo => { %>
+    <li>
+        <h2><a href="/photos/<%= photo.id %>"><%= photo.title %></a></h2>
+        <img src="/<%= photo.imagePath %>" width="300" alt="<%= photo.title %>" />
+        <p><%= photo.description %></p>
+        <p>Price: $<%= photo.price %></p>
+    </li>
+    <% }) %>
+</ul>

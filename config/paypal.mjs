@@ -1,4 +1,7 @@
-const paypal = require("@paypal/checkout-server-sdk");
+import dotenv from "dotenv";
+import paypal from "@paypal/checkout-server-sdk";
+
+dotenv.config();
 
 const environment = new paypal.core.SandboxEnvironment(
     process.env.PAYPAL_CLIENT_ID,
@@ -6,4 +9,4 @@ const environment = new paypal.core.SandboxEnvironment(
 );
 const client = new paypal.core.PayPalHttpClient(environment);
 
-module.exports = client;
+export default client;

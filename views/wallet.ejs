@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Deposit</title>
+        <script src="https://www.paypal.com/sdk/js?client-id=AewZJuwZugv-6QwBdc2hEx45ooMP3DVHf0MOsDHsneHF7N8lPFL7lgHMoVQFq8gDGZbZ72ADV7mBVr2U"></script>
+    </head>
+    <body>
+        <a href="/photos">< Back</a>
+        <h1>Balance: <%= balance %></h1>
+        <ul>
+            <% transactions.forEach(transaction => { %>
+            <li>
+                <p style="font-weight: bold; font-size: large">
+                    Title: <%= transaction.title %>
+                </p>
+                <p>
+                    Amount:
+                    <span
+                        style='color: <%= transaction.type == "Income" ? "green" : "red" %>; font-weight: bold'
+                        ><%= transaction.type == "Income" ? "+" : "-" %>$<%=
+                        transaction.amount %></span
+                    >
+                </p>
+                <p>Date: <%= transaction.createdAt %></p>
+            </li>
+            <% }) %>
+        </ul>
+        <hr />
+        <div>
+            <h1>Withdrawal</h1>
+            <input type="number" id="wamount" min="0" placeholder="amount" />
+            <input type="email" id="email" placeholder="email" />
+            <button type="submit" id="withdraw-btn">Withdraw</button>
+        </div>
+        <br />
+        <div>
+            <h1>Deposit</h1>
+            <input type="number" id="amount" min="0" placeholder="amount" />
+            <button id="pay-btn">Pay</button>
+            <div id="paypal-button-container"></div>
+        </div>
+
+        <script>
+            let orderID;
+            let privateAmount;
+
+            document.querySelector("#pay-btn").addEventListener("click", () => {
+                document.querySelector("#amount").style.display = "none";
+                document.querySelector("#pay-btn").style.display = "none";
+                paypal
+                    .Buttons({
+                        createOrder: async function (data, actions) {
+                            return fetch("/wallet/deposit", {
+                                method: "post",
+                                headers: {
+                                    "content-type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    amount: document.querySelector("#amount")
+                                        .value,
+                                }),
+                            })
+                                .then(function (res) {
+                                    return res.json();
+                                })
+                                .then(function (orderData) {
+                                    orderID = orderData.id;
+                                    privateAmount =
+                                        document.querySelector("#amount").value;
+                                    return orderData.id;
+                                });
+                        },
+                        onApprove: function (data, actions) {
+                            return fetch("/wallet/capture-payment", {
+                                method: "post",
+                                headers: {
+                                    "content-type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    orderId: orderID,
+                                    amount: privateAmount,
+                                }),
+                            })
+                                .then(function (res) {
+                                    return res.json();
+                                })
+                                .then(function (orderData) {
+                                    if (orderData.success) {
+                                        location.href = "/wallet";
+                                    } else {
+                                        alert("Transaction failed.");
+                                    }
+                                });
+                        },
+                        onError: function (err) {
+                            console.error("Error during payment process", err);
+                        },
+                    })
+                    .render("#paypal-button-container");
+            });
+
+            document
+                .querySelector("#withdraw-btn")
+                .addEventListener("click", () => {
+                    let wamount = document.querySelector("#wamount").value;
+                    let email = document.querySelector("#email").value;
+
+                    fetch("/wallet/withdraw", {
+                        method: "post",
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            amount: wamount,
+                            email,
+                        }),
+                    })
+                        .then((res) => res.json())
+                        .then((res) => {
+                            console.log(res);
+                            location.href = "/wallet";
+                        });
+                });
+        </script>
+    </body>
+</html>

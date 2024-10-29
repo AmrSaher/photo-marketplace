@@ -4,7 +4,10 @@ import { authenticated, guest, notVerified } from "../middlewares/index.mjs";
 import * as AuthController from "../controllers/auth.controller.mjs";
 import upload from "../config/multer.mjs";
 import { checkSchema } from "express-validator";
-import { RegisterValidationSchema } from "../validation/index.mjs";
+import {
+    RegisterValidationSchema,
+    VerifiyAccountValidationSchema,
+} from "../validation/index.mjs";
 
 const router = Router();
 
@@ -43,6 +46,7 @@ router.post(
     "/verifiy-account",
     authenticated,
     notVerified,
+    checkSchema(VerifiyAccountValidationSchema),
     upload.fields([
         { name: "selfie", maxCount: 1 },
         { name: "front_national_id", maxCount: 1 },
@@ -51,6 +55,7 @@ router.post(
     AuthController.verifiy
 );
 
+// Profile
 router.get("/profile", authenticated, AuthController.profilePage);
 
 export default router;

@@ -3,19 +3,16 @@ import User from "../models/User.mjs";
 import { generateOtp, sendOtpEmail } from "../utils/otp.mjs";
 import Transaction from "../models/Transaction.mjs";
 import { matchedData, validationResult } from "express-validator";
+import { getErrors } from "../utils/validation.mjs";
 
 export const registerPage = (req, res) =>
-    res.render("register", { errors: {} });
+    res.render("auth/register", { errors: {} });
 
 export const register = async (req, res) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
-        let errors = {};
-        validationErrors.array().forEach((error) => {
-            errors[error.path] = error.msg;
-        });
-
-        return res.render("register", { errors });
+        const errors = getErrors(validationErrors);
+        return res.render("auth/register", { errors });
     }
 
     const data = matchedData(req);
@@ -37,14 +34,10 @@ export const register = async (req, res) => {
     res.redirect("/login");
 };
 
-export const loginPage = (req, res) => {
-    res.render("login");
-};
+export const loginPage = (req, res) => res.render("auth/login");
 
 export const logout = (req, res) => {
-    req.logout((err) => {
-        res.redirect("/login");
-    });
+    req.logout((err) => res.redirect("/login"));
 };
 
 export const verifiyPage = async (req, res) => {
@@ -56,30 +49,41 @@ export const verifiyPage = async (req, res) => {
     });
     // await sendOtpEmail(req.user.email, otp);
 
-    res.renderWithLayout("verifiy-account");
+    res.renderWithLayout("auth/verifiy-account", { errors: {} });
 };
 
 export const verifiy = async (req, res) => {
-    const { otp } = req.body;
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        const errors = getErrors(validationErrors);
+        return res.renderWithLayout("auth/verifiy-account", { errors });
+    }
+
+    const { otp } = matchedData(req);
 
     if (otp != req.user.otp || req.user.otpExp < Date.now()) {
-        req.flash("error_msg", "OTP is wrong");
-        return res.redirect("/verifiy-account");
+        return res.renderWithLayout("auth/verifiy-account", {
+            errors: { otp: "OTP is wrong." },
+        });
     }
 
     const user = await User.findByIdAndUpdate(req.user._id, {
-        otp: undefined,
-        otpExp: undefined,
+        otp: null,
+        otpExp: null,
     });
 
     try {
-        const selfie = req.files["selfie"][0]["path"];
-        const frontNationalId = req.files["front_national_id"][0]["path"];
-        const backNationalId = req.files["back_national_id"][0]["path"];
-
-        if (!selfie || !frontNationalId || !backNationalId) {
-            req.flash("error_msg", "Both selfie and national ID are required");
-            return res.redirect("/photos");
+        let selfie;
+        let frontNationalId;
+        let backNationalId;
+        try {
+            selfie = req.files["selfie"][0]["path"];
+            frontNationalId = req.files["front_national_id"][0]["path"];
+            backNationalId = req.files["back_national_id"][0]["path"];
+        } catch (err) {
+            return res.renderWithLayout("auth/verifiy-account", {
+                errors: { images: "Images are required." },
+            });
         }
 
         user.verificationStatus = "Pending";
@@ -94,8 +98,9 @@ export const verifiy = async (req, res) => {
         await newApplication.save();
         await user.save();
     } catch (error) {
-        req.flash("error_msg", "File upload failed");
+        req.flash("error_msg", "File upload failed.");
         console.error(error);
+        return res.redirect("/verifiy-account");
     }
 
     return res.redirect("/photos");
@@ -108,5 +113,5 @@ export const profilePage = async (req, res) => {
     for (let transaction of transactions) {
         balance += (transaction.type == "Income" ? 1 : -1) * transaction.amount;
     }
-    res.renderWithLayout("profile", { user: req.user, balance });
+    res.renderWithLayout("auth/profile", { user: req.user, balance });
 };

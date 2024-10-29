@@ -9,7 +9,7 @@ import crypto from "crypto";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const uploadPage = (req, res) => res.renderWithLayout("upload");
+export const uploadPage = (req, res) => res.renderWithLayout("photos/upload");
 
 export const upload = async (req, res) => {
     const { title, description, price } = req.body;
@@ -56,12 +56,12 @@ export const upload = async (req, res) => {
 export const getPhotos = async (req, res) => {
     const photos = await Photo.find();
 
-    res.renderWithLayout("photos", { photos });
+    res.renderWithLayout("photos/photos", { photos });
 };
 
 export const myPhotos = async (req, res) => {
     const photos = await Photo.find({ owners: { $in: [req.user.id] } });
-    res.renderWithLayout("my-photos", { photos });
+    res.renderWithLayout("photos/my-photos", { photos });
 };
 
 export const getPhoto = async (req, res) => {
@@ -70,7 +70,7 @@ export const getPhoto = async (req, res) => {
     const user = await User.findById(photo.user);
     photo.user = user;
 
-    res.renderWithLayout("photo", { photo, user: req.user });
+    res.renderWithLayout("photos/photo", { photo, user: req.user });
 };
 
 export const buyPhoto = async (req, res) => {

@@ -38,9 +38,14 @@
         method="POST"
         enctype="multipart/form-data"
     >
+        <% if (errors.images) { %>
+        <p style="color: red"><%= errors.images %></p>
+        <% } %>
         <!-- OTP -->
         <div>
-            <label for="otp" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+            <label
+                for="otp"
+                class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
                 >Enter OTP
                 <span class="tooltip">
                     <svg
@@ -68,11 +73,16 @@
                 class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
                 required
             />
+            <% if (errors.otp) { %>
+            <p style="color: red"><%= errors.otp %></p>
+            <% } %>
         </div>
 
         <!-- Selfie Image -->
         <div>
-            <label for="selfie" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+            <label
+                for="selfie"
+                class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
                 >Upload Selfie with ID<span class="tooltip">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +97,8 @@
                         ></path>
                     </svg>
                     <span class="tooltip-text"
-                        >Take a selfie holding your national ID clearly visible.</span
+                        >Take a selfie holding your national ID clearly
+                        visible.</span
                     >
                 </span></label
             >
@@ -97,13 +108,14 @@
                 name="selfie"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
                 accept="image/*"
-                required
             />
         </div>
 
         <!-- National ID Front -->
         <div>
-            <label for="idFront" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+            <label
+                for="idFront"
+                class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
                 >National ID Front<span class="tooltip">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -128,13 +140,14 @@
                 name="front_national_id"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
                 accept="image/*"
-                required
             />
         </div>
 
         <!-- National ID Back -->
         <div>
-            <label for="idBack" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+            <label
+                for="idBack"
+                class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
                 >National ID Back<span class="tooltip">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +172,6 @@
                 name="back_national_id"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
                 accept="image/*"
-                required
             />
         </div>
 

@@ -1,8 +1,174 @@
-<a href="/photos">< Back</a>
-<h1>Verifiy Account</h1>
-<form action="/verifiy-account" method="POST" enctype="multipart/form-data">
-    <input type="text" placeholder="OTP" name="otp" required />
-    <input type="file" name="national_id" required />
-    <input type="file" name="selfie" required />
-    <button type="submit">submit</button>
-</form>
+<style>
+    /* Tooltip styling */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 200px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position above the icon */
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<!-- Verify Account Form -->
+<section class="container mx-auto p-6">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Verify Your Account</h2>
+    <form
+        class="bg-white shadow-md rounded-lg p-8 space-y-6"
+        action="/verifiy-account"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+        <!-- OTP -->
+        <div>
+            <label for="otp" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+                >Enter OTP
+                <span class="tooltip">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 30 30"
+                    >
+                        <path
+                            d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M16,21h-2v-7h2V21z M15,11.5 c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5S15.828,11.5,15,11.5z"
+                        ></path>
+                    </svg>
+                    <span class="tooltip-text"
+                        >Please enter the One-Time Password sent to your
+                        email.</span
+                    >
+                </span></label
+            >
+            <input
+                type="text"
+                id="otp"
+                name="otp"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
+                required
+            />
+        </div>
+
+        <!-- Selfie Image -->
+        <div>
+            <label for="selfie" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+                >Upload Selfie with ID<span class="tooltip">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 30 30"
+                    >
+                        <path
+                            d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M16,21h-2v-7h2V21z M15,11.5 c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5S15.828,11.5,15,11.5z"
+                        ></path>
+                    </svg>
+                    <span class="tooltip-text"
+                        >Take a selfie holding your national ID clearly visible.</span
+                    >
+                </span></label
+            >
+            <input
+                type="file"
+                id="selfie"
+                name="selfie"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
+                accept="image/*"
+                required
+            />
+        </div>
+
+        <!-- National ID Front -->
+        <div>
+            <label for="idFront" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+                >National ID Front<span class="tooltip">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 30 30"
+                    >
+                        <path
+                            d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M16,21h-2v-7h2V21z M15,11.5 c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5S15.828,11.5,15,11.5z"
+                        ></path>
+                    </svg>
+                    <span class="tooltip-text"
+                        >Upload the front side of your national ID.</span
+                    >
+                </span></label
+            >
+            <input
+                type="file"
+                id="idFront"
+                name="front_national_id"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
+                accept="image/*"
+                required
+            />
+        </div>
+
+        <!-- National ID Back -->
+        <div>
+            <label for="idBack" class="flex items-center gap-1 text-gray-700 font-semibold mb-2"
+                >National ID Back<span class="tooltip">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 30 30"
+                    >
+                        <path
+                            d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M16,21h-2v-7h2V21z M15,11.5 c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5S15.828,11.5,15,11.5z"
+                        ></path>
+                    </svg>
+                    <span class="tooltip-text"
+                        >Upload the back side of your national ID.</span
+                    >
+                </span></label
+            >
+            <input
+                type="file"
+                id="idBack"
+                name="back_national_id"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-500"
+                accept="image/*"
+                required
+            />
+        </div>
+
+        <!-- Submit Button -->
+        <button
+            type="submit"
+            class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-700"
+        >
+            Submit Application
+        </button>
+    </form>
+</section>

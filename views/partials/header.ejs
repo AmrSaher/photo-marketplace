@@ -1,0 +1,68 @@
+<!-- Navbar -->
+<nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-gray-800"><a href="/photos">Image Marketplace</a></h1>
+    <div class="flex gap-4 items-center">
+        <% if (!isAuthenticated) { %>
+        <a href="/login" class="text-gray-600 hover:text-purple-500"
+            >Login</a
+        >
+        <a href="/register" class="text-gray-600 hover:text-purple-500"
+            >Register</a
+        >
+        <% } %> <% if (isAuthenticated) { %>
+        <a href="/photos/my-photos" class="text-gray-600 hover:text-purple-500"
+            >Owned Photos</a
+        >
+        <a href="/photos/upload" class="text-gray-600 hover:text-purple-500"
+            >Sell a Photo</a
+        >
+        <!-- Profile Image and Dropdown -->
+        <div class="relative">
+            <img
+                src="https://th.bing.com/th/id/OIP.NqY3rNMnx2NXYo3KJfg43gHaHa?rs=1&pid=ImgDetMain"
+                alt="Profile"
+                class="w-10 h-10 rounded-full cursor-pointer hover:ring-2 hover:ring-purple-500"
+                id="profileImage"
+            />
+
+            <!-- Dropdown Menu -->
+            <div
+                id="dropdownMenu"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden z-20"
+            >
+                <a
+                    href="/profile"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >Profile</a
+                >
+                <a
+                    href="/wallet"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >Wallet</a
+                >
+                <a
+                    href="/logout"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg"
+                    >Logout</a
+                >
+            </div>
+        </div>
+        <% } %>
+    </div>
+</nav>
+
+<script>
+    // Profile dropdown functionality
+    const profileImage = document.getElementById("profileImage");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    profileImage.addEventListener("click", () => {
+        dropdownMenu.classList.toggle("hidden");
+    });
+
+    dropdownMenu.addEventListener("mouseleave", () => {
+        setTimeout(() => {
+            dropdownMenu.classList.add("hidden");
+        }, 500);
+    });
+</script>

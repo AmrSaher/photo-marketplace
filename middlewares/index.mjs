@@ -4,5 +4,6 @@ import admin from "./admin.middleware.mjs";
 import notOwner from "./notOwner.middleware.mjs";
 import verified from "./verified.middleware.mjs";
 import notVerified from "./notVerified.middleware.mjs";
+import owner from "./owner.middleware.mjs";
 
-export { admin, authenticated, guest, notOwner, verified, notVerified };
+export { admin, authenticated, guest, notOwner, verified, notVerified, owner };

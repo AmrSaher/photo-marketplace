@@ -1,128 +1,239 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Deposit</title>
-        <script src="https://www.paypal.com/sdk/js?client-id=AewZJuwZugv-6QwBdc2hEx45ooMP3DVHf0MOsDHsneHF7N8lPFL7lgHMoVQFq8gDGZbZ72ADV7mBVr2U"></script>
-    </head>
-    <body>
-        <a href="/photos">< Back</a>
-        <h1>Balance: <%= balance %></h1>
-        <ul>
-            <% transactions.forEach(transaction => { %>
-            <li>
-                <p style="font-weight: bold; font-size: large">
-                    Title: <%= transaction.title %>
-                </p>
-                <p>
-                    Amount:
-                    <span
-                        style='color: <%= transaction.type == "Income" ? "green" : "red" %>; font-weight: bold'
-                        ><%= transaction.type == "Income" ? "+" : "-" %>$<%=
-                        transaction.amount %></span
-                    >
-                </p>
-                <p>Date: <%= transaction.createdAt %></p>
-            </li>
-            <% }) %>
-        </ul>
-        <hr />
-        <div>
-            <h1>Withdrawal</h1>
-            <input type="number" id="wamount" min="0" placeholder="amount" />
-            <input type="email" id="email" placeholder="email" />
-            <button type="submit" id="withdraw-btn">Withdraw</button>
+<script src="https://www.paypal.com/sdk/js?client-id=AewZJuwZugv-6QwBdc2hEx45ooMP3DVHf0MOsDHsneHF7N8lPFL7lgHMoVQFq8gDGZbZ72ADV7mBVr2U"></script>
+<!-- Top-Up Modal -->
+<div
+    id="top-up-modal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden"
+>
+    <div class="bg-white p-8 rounded-lg shadow-lg relative max-w-lg w-full">
+        <div class="w-full flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold">Top-Up</h2>
+            <button
+                onclick="toggleModal('top-up-modal')"
+                class="text-gray-600 hover:text-gray-800 text-2xl"
+            >
+                &times;
+            </button>
         </div>
-        <br />
-        <div>
-            <h1>Deposit</h1>
-            <input type="number" id="amount" min="0" placeholder="amount" />
-            <button id="pay-btn">Pay</button>
+        <div class="modal-content">
             <div id="paypal-button-container"></div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" id="amount-label"
+                    >Amount</label
+                >
+                <input
+                    type="number"
+                    id="amount"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="Enter amount"
+                    required
+                />
+            </div>
+            <button
+                class="bg-purple-500 text-white w-full py-2 rounded-lg hover:bg-purple-700"
+                id="top-up-btn"
+            >
+                Next
+            </button>
         </div>
+    </div>
+</div>
 
-        <script>
-            let orderID;
-            let privateAmount;
+<!-- Withdraw Modal -->
+<div
+    id="withdraw-modal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden"
+>
+    <div class="bg-white p-8 rounded-lg shadow-lg relative max-w-lg w-full">
+        <div class="w-full flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold">Withdraw</h2>
+            <button
+                onclick="toggleModal('withdraw-modal')"
+                class="text-gray-600 hover:text-gray-800 text-2xl"
+            >
+                &times;
+            </button>
+        </div>
+        <div class="modal-content">
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="Enter email"
+                    required
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2" id="amount-label"
+                    >Amount</label
+                >
+                <input
+                    type="number"
+                    id="wamount"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="Enter amount"
+                    required
+                />
+            </div>
+            <button
+                class="bg-purple-500 text-white w-full py-2 rounded-lg hover:bg-purple-700"
+                id="withdraw-btn"
+            >
+                Withdraw
+            </button>
+        </div>
+    </div>
+</div>
 
-            document.querySelector("#pay-btn").addEventListener("click", () => {
-                document.querySelector("#amount").style.display = "none";
-                document.querySelector("#pay-btn").style.display = "none";
-                paypal
-                    .Buttons({
-                        createOrder: async function (data, actions) {
-                            return fetch("/wallet/deposit", {
-                                method: "post",
-                                headers: {
-                                    "content-type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    amount: document.querySelector("#amount")
-                                        .value,
-                                }),
-                            })
-                                .then(function (res) {
-                                    return res.json();
-                                })
-                                .then(function (orderData) {
-                                    orderID = orderData.id;
-                                    privateAmount =
-                                        document.querySelector("#amount").value;
-                                    return orderData.id;
-                                });
-                        },
-                        onApprove: function (data, actions) {
-                            return fetch("/wallet/capture-payment", {
-                                method: "post",
-                                headers: {
-                                    "content-type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    orderId: orderID,
-                                    amount: privateAmount,
-                                }),
-                            })
-                                .then(function (res) {
-                                    return res.json();
-                                })
-                                .then(function (orderData) {
-                                    if (orderData.success) {
-                                        location.href = "/wallet";
-                                    } else {
-                                        alert("Transaction failed.");
-                                    }
-                                });
-                        },
-                        onError: function (err) {
-                            console.error("Error during payment process", err);
-                        },
-                    })
-                    .render("#paypal-button-container");
-            });
+<!-- Wallet Content -->
+<section class="container mx-auto p-6">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Your Wallet</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <p class="text-gray-600 mb-4">
+            Current Balance:
+            <span class="text-xl font-semibold text-green-500"
+                >$<%= balance %></span
+            >
+        </p>
+        <div class="flex items-center gap-6 items-center">
+            <button
+                class="bg-purple-500 text-white px-6 py-3 rounded hover:bg-purple-700"
+                onclick="toggleModal('top-up-modal')"
+            >
+                Top-Up
+            </button>
+            <button
+                class="bg-purple-500 text-white px-6 py-3 rounded hover:bg-purple-700"
+                onclick="toggleModal('withdraw-modal')"
+            >
+                Withdraw
+            </button>
+        </div>
+    </div>
+</section>
 
-            document
-                .querySelector("#withdraw-btn")
-                .addEventListener("click", () => {
-                    let wamount = document.querySelector("#wamount").value;
-                    let email = document.querySelector("#email").value;
+<!-- Transactions List -->
+<section class="container mx-auto p-6">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Transactions</h2>
+    <div class="bg-white rounded-lg shadow-md">
+        <table class="min-w-full">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="py-2 px-4 text-left">Title</th>
+                    <th class="py-2 px-4 text-left">Amount</th>
+                    <th class="py-2 px-4 text-left">Date</th>
+                    <th class="py-2 px-4 text-left">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% transactions.forEach(transaction => { %>
+                <tr>
+                    <td class="py-2 px-4"><%= transaction.title %></td>
+                    <td
+                        class="py-2 px-4"
+                        style='color: <%= transaction.type == "Income" ? "green" : "red" %>; font-weight: bold'
+                    >
+                        <%= transaction.type == "Income" ? "+" : "-" %>$<%=
+                        transaction.amount %>
+                    </td>
+                    <td class="py-2 px-4"><%= transaction.createdAt %></td>
+                    <td
+                        class="py-2 px-4"
+                        style='color: <%= transaction.type == "Income" ? "green" : "red" %>; font-weight: bold'
+                    >
+                        <%= transaction.type %>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</section>
 
-                    fetch("/wallet/withdraw", {
+<script>
+    function toggleModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.toggle("hidden");
+    }
+
+    let orderID;
+    let privateAmount;
+
+    document.querySelector("#top-up-btn").addEventListener("click", () => {
+        document.querySelector("#amount").style.display = "none";
+        document.querySelector("#amount-label").style.display = "none";
+        document.querySelector("#top-up-btn").style.display = "none";
+        paypal
+            .Buttons({
+                createOrder: async function (data, actions) {
+                    return fetch("/wallet/deposit", {
                         method: "post",
                         headers: {
                             "content-type": "application/json",
                         },
                         body: JSON.stringify({
-                            amount: wamount,
-                            email,
+                            amount: document.querySelector("#amount").value,
                         }),
                     })
-                        .then((res) => res.json())
-                        .then((res) => {
-                            console.log(res);
-                            location.href = "/wallet";
+                        .then(function (res) {
+                            return res.json();
+                        })
+                        .then(function (orderData) {
+                            orderID = orderData.id;
+                            privateAmount =
+                                document.querySelector("#amount").value;
+                            return orderData.id;
                         });
+                },
+                onApprove: function (data, actions) {
+                    return fetch("/wallet/capture-payment", {
+                        method: "post",
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            orderId: orderID,
+                            amount: privateAmount,
+                        }),
+                    })
+                        .then(function (res) {
+                            return res.json();
+                        })
+                        .then(function (orderData) {
+                            if (orderData.success) {
+                                location.href = "/wallet";
+                            } else {
+                                alert("Transaction failed.");
+                            }
+                        });
+                },
+                onError: function (err) {
+                    console.error("Error during payment process", err);
+                },
+            })
+            .render("#paypal-button-container");
+    });
+
+    document.querySelector("#withdraw-btn").addEventListener("click", () => {
+        let wamount = document.querySelector("#wamount").value;
+        let email = document.querySelector("#email").value;
+
+        if (confirm("Are you sure ?"))
+            fetch("/wallet/withdraw", {
+                method: "post",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    amount: wamount,
+                    email,
+                }),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log(res);
+                    location.href = "/wallet";
                 });
-        </script>
-    </body>
-</html>
+    });
+</script>

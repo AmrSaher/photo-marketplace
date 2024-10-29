@@ -1,33 +1,73 @@
-<a href="/photos">< Back</a>
-<p><%= photo.title %></p>
-<p><%= photo.price %></p>
-<img
-    src="/<%= photo.watermarkImagePath %>"
-    width="300"
-    oncontextmenu="return false;"
-    alt="<%= photo.title %>"
-/>
-
-<% if (!photo.owners.includes(user.id)) { %>
-<button id="buy-photo-btn">Buy photo</button>
-<script>
-    document.querySelector("#buy-photo-btn").addEventListener("click", () => {
-        if (confirm("Are you sure that you want to buy this photo ?")) {
-            fetch("/photos/buy-photo", {
-                method: "post",
-                headers: {
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    photoId: "<%= photo.id %>",
-                }),
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    console.log(res);
-                    location.href = "/photos/<%= photo.id %>";
-                });
-        }
-    });
-</script>
-<% } %>
+<!-- Photo Details -->
+<section class="container mx-auto p-6">
+    <div class="flex">
+        <img
+            src="/get-image<%= photo.watermarkImagePath.split('uploads')[1] %>"
+            class="w-1/2 rounded-lg"
+        />
+        <div class="ml-6">
+            <h2 class="text-3xl font-bold text-gray-800"><%= photo.title %></h2>
+            <p class="mt-4 text-gray-600"><%= photo.description %></p>
+            <!-- User Info -->
+            <div class="flex items-center mt-4">
+                <img
+                    src="https://th.bing.com/th/id/OIP.NqY3rNMnx2NXYo3KJfg43gHaHa?rs=1&pid=ImgDetMain"
+                    alt="User Profile"
+                    class="w-12 h-12 rounded-full mr-3"
+                />
+                <span class="text-gray-800 font-medium"
+                    ><%= photo.user.name %></span
+                >
+            </div>
+            <% if (!photo.owners.includes(user.id)) { %>
+            <button
+                id="buy-btn"
+                class="mt-6 bg-purple-500 text-white px-6 py-3 rounded hover:bg-purple-700"
+            >
+                Buy for $<%= photo.price %>
+            </button>
+            <script>
+                document
+                    .querySelector("#buy-btn")
+                    .addEventListener("click", () => {
+                        if (
+                            confirm(
+                                "Are you sure that you want to buy this photo ?"
+                            )
+                        ) {
+                            fetch("/photos/buy-photo", {
+                                method: "post",
+                                headers: {
+                                    "content-type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    photoId: "<%= photo.id %>",
+                                }),
+                            }).then((res) => {
+                                console.log(res);
+                                location.href = "/photos/<%= photo.id %>";
+                            });
+                        }
+                    });
+            </script>
+            <% } else { %>
+            <br /><!--
+            <a
+                class="mt-10 bg-purple-500 text-white px-6 py-3 rounded hover:bg-purple-700"
+                href="/photos/download/<%= photo.id %>"
+                target="_blank"
+            >
+                Download Photo
+            </a> -->
+            <!-- Download Button -->
+            <a
+                href="/photos/download/<%= photo.id %>"
+                target="_blank"
+                class="mt-4 bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700"
+            >
+                Download Photo
+            </a>
+            <% } %>
+        </div>
+    </div>
+</section>

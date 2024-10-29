@@ -14,7 +14,7 @@ export const walletPage = async (req, res) => {
         balance += (transaction.type == "Income" ? 1 : -1) * transaction.amount;
     }
 
-    res.render("wallet", { transactions, balance });
+    res.renderWithLayout("wallet", { transactions, balance });
 };
 
 export const deposit = async (req, res) => {
@@ -93,7 +93,7 @@ export const withdraw = async (req, res) => {
             {
                 recipient_type: "EMAIL",
                 amount: {
-                    value: amount,
+                    value: (amount * 80) / 100,
                     currency: "USD",
                 },
                 receiver: email,
@@ -109,13 +109,20 @@ export const withdraw = async (req, res) => {
                 msg: "Payout failed",
             });
         } else {
-            const newTransaction = new Transaction({
+            const transaction1 = new Transaction({
                 to: req.user._id,
-                amount,
+                amount: (amount * 80) / 100,
                 type: "Outcome",
                 title: "Funds Withdrawal",
             });
-            await newTransaction.save();
+            const transaction2 = new Transaction({
+                to: req.user._id,
+                amount: (amount * 20) / 100,
+                type: "Outcome",
+                title: "Marketplace Fee",
+            });
+            await transaction1.save();
+            await transaction2.save();
 
             res.status(200).json({
                 msg: "Payout successful",

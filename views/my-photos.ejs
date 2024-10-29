@@ -1,12 +1,24 @@
-<a href="/photos">< Back</a>
-<h1>My Photos</h1>
-<ul>
-    <% photos.forEach(photo => { %>
-    <li>
-        <h2><a href="/photos/<%= photo.id %>"><%= photo.title %></a></h2>
-        <img src="/<%= photo.imagePath %>" width="300" alt="<%= photo.title %>" />
-        <p><%= photo.description %></p>
-        <p>Price: $<%= photo.price %></p>
-    </li>
-    <% }) %>
-</ul>
+<!-- Photo Grid -->
+<section class="container mx-auto p-6">
+    <h2 class="text-3xl font-bold mb-6 text-gray-800">My Photos</h2>
+    <div class="grid grid-cols-3 gap-6">
+        <% photos.forEach(photo => { %>
+        <div class="relative group">
+            <img
+                src="/get-image<%= photo.watermarkImagePath.split('uploads')[1] %>"
+                class="w-full h-64 object-cover rounded-lg"
+                style="
+                    -webkit-user-drag: none;
+                    pointer-events: none;
+                    user-drag: none;
+                "
+            />
+            <a
+                href="/photos/<%= photo.id %>"
+                class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex justify-center items-center text-white text-lg font-semibold"
+                >View</a
+            >
+        </div>
+        <% }) %>
+    </div>
+</section>

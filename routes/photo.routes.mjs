@@ -1,5 +1,10 @@
 import express, { Router } from "express";
-import { authenticated, notOwner, verified } from "../middlewares/index.mjs";
+import {
+    authenticated,
+    notOwner,
+    verified,
+    owner,
+} from "../middlewares/index.mjs";
 import upload from "../config/multer.mjs";
 import * as PhotosController from "../controllers/photos.controller.mjs";
 
@@ -28,6 +33,14 @@ router.post(
     express.json(),
     notOwner,
     PhotosController.buyPhoto
+);
+
+// Download photo
+router.get(
+    "/download/:id",
+    authenticated,
+    owner,
+    PhotosController.downloadPhoto
 );
 
 export default router;

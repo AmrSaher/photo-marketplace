@@ -1,9 +1,7 @@
 import Photo from "../models/Photo.mjs";
 
 export default async (req, res, next) => {
-    const { photoId } = req.body;
-
-    const photo = await Photo.findById(photoId);
+    const photo = await Photo.findById(req.body?.photoId || req.params?.id);
 
     if (!photo.owners.includes(req.user.id)) {
         return next();

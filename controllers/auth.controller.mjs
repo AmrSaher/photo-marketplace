@@ -1,15 +1,39 @@
 import Application from "../models/Application.mjs";
 import User from "../models/User.mjs";
 import { generateOtp, sendOtpEmail } from "../utils/otp.mjs";
+import Transaction from "../models/Transaction.mjs";
+import { matchedData, validationResult } from "express-validator";
 
-export const registerPage = (req, res) => {
-    res.render("register");
-};
+export const registerPage = (req, res) =>
+    res.render("register", { errors: {} });
 
 export const register = async (req, res) => {
-    const { name, email, password } = req.body;
-    const user = new User({ name, email, password });
-    await user.save();
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        let errors = {};
+        validationErrors.array().forEach((error) => {
+            errors[error.path] = error.msg;
+        });
+
+        return res.render("register", { errors });
+    }
+
+    const data = matchedData(req);
+
+    try {
+        const user = new User({
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            postalCode: data?.postal_code,
+            address: data?.address,
+        });
+        await user.save();
+    } catch (err) {
+        req.flash("error_msg", "Something wrong!");
+        return res.redirect("/register");
+    }
+
     res.redirect("/login");
 };
 
@@ -30,41 +54,43 @@ export const verifiyPage = async (req, res) => {
         otp,
         otpExp: new Date(Date.now() + 10 * 60 * 1000),
     });
-    await sendOtpEmail(req.user.email, otp);
+    // await sendOtpEmail(req.user.email, otp);
 
-    return res.render("verifiy-account");
+    res.renderWithLayout("verifiy-account");
 };
 
 export const verifiy = async (req, res) => {
     const { otp } = req.body;
+
+    if (otp != req.user.otp || req.user.otpExp < Date.now()) {
+        req.flash("error_msg", "OTP is wrong");
+        return res.redirect("/verifiy-account");
+    }
 
     const user = await User.findByIdAndUpdate(req.user._id, {
         otp: undefined,
         otpExp: undefined,
     });
 
-    // if (otp != req.user.otp || req.user.otpExp < Date.now()) {
-    //     req.flash("error_msg", "OTP is wrong");
-    //     res.redirect("/verifiy-account");
-    // }
-
     try {
         const selfie = req.files["selfie"][0]["path"];
-        const nationalId = req.files["national_id"][0]["path"];
+        const frontNationalId = req.files["front_national_id"][0]["path"];
+        const backNationalId = req.files["back_national_id"][0]["path"];
 
-        if (!selfie || !nationalId) {
+        if (!selfie || !frontNationalId || !backNationalId) {
             req.flash("error_msg", "Both selfie and national ID are required");
             return res.redirect("/photos");
         }
 
-        console.log("do");
-
         user.verificationStatus = "Pending";
+        user.selfieImagePath = selfie;
+        user.frontNationalIdImagePath = frontNationalId;
+        user.backNationalIdImagePath = backNationalId;
+
         const newApplication = new Application({
             user: req.user.id,
-            nationalIdImagePath: nationalId,
-            selfieImagePath: selfie,
         });
+
         await newApplication.save();
         await user.save();
     } catch (error) {
@@ -73,4 +99,14 @@ export const verifiy = async (req, res) => {
     }
 
     return res.redirect("/photos");
+};
+
+export const profilePage = async (req, res) => {
+    const transactions = await Transaction.find({ to: req.user._id });
+    let balance = 0;
+
+    for (let transaction of transactions) {
+        balance += (transaction.type == "Income" ? 1 : -1) * transaction.amount;
+    }
+    res.renderWithLayout("profile", { user: req.user, balance });
 };

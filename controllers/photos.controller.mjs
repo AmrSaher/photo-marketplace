@@ -4,19 +4,20 @@ import User from "../models/User.mjs";
 import path from "path";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
+import crypto from "crypto";
 
-export const uploadPage = (req, res) => res.render("upload");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const uploadPage = (req, res) => res.renderWithLayout("upload");
 
 export const upload = async (req, res) => {
     const { title, description, price } = req.body;
 
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
     const originalImagePath = req.file.path;
     const watermarkImagePath = path.join(
         "uploads",
-        "watermarked-" + req.file.filename
+        crypto.randomInt(100000, 999999) + "-" + req.file.filename
     );
     const watermark = await sharp(
         path.join(__dirname, "..", "assets", "watermark.png")
@@ -55,19 +56,21 @@ export const upload = async (req, res) => {
 export const getPhotos = async (req, res) => {
     const photos = await Photo.find();
 
-    res.render("photos", { photos });
+    res.renderWithLayout("photos", { photos });
 };
 
 export const myPhotos = async (req, res) => {
     const photos = await Photo.find({ owners: { $in: [req.user.id] } });
-    res.render("my-photos", { photos });
+    res.renderWithLayout("my-photos", { photos });
 };
 
 export const getPhoto = async (req, res) => {
     const { id } = req.params;
     const photo = await Photo.findById(id);
+    const user = await User.findById(photo.user);
+    photo.user = user;
 
-    res.render("photo", { photo });
+    res.renderWithLayout("photo", { photo, user: req.user });
 };
 
 export const buyPhoto = async (req, res) => {
@@ -117,4 +120,16 @@ export const buyPhoto = async (req, res) => {
             msg: "Server error, try again",
         });
     }
+};
+
+export const downloadPhoto = async (req, res) => {
+    const photo = await Photo.findById(req.params.id);
+    const imagePath = path.join(__dirname, "..", photo.imagePath);
+
+    res.download(imagePath, "photo." + photo.imagePath.split(".")[1], (err) => {
+        if (err) {
+            console.error("Error downloading the image:", err);
+            res.status(500).send("Could not download the image.");
+        }
+    });
 };

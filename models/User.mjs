@@ -22,10 +22,13 @@ const UserSchema = new mongoose.Schema(
             required: true,
             default: "NotVerified",
         },
-        nationalId: {
+        frontNationalIdImagePath: {
             type: mongoose.Schema.Types.String,
         },
-        selfieImage: {
+        backNationalIdImagePath: {
+            type: mongoose.Schema.Types.String,
+        },
+        selfieImagePath: {
             type: mongoose.Schema.Types.String,
         },
         isAdmin: {
@@ -44,6 +47,12 @@ const UserSchema = new mongoose.Schema(
                 ref: "Photo",
             },
         ],
+        address: {
+            type: mongoose.Schema.Types.String,
+        },
+        postalCode: {
+            type: mongoose.Schema.Types.String,
+        }
     },
     { timestamps: true }
 );

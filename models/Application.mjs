@@ -7,14 +7,6 @@ const ApplicationSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        nationalIdImagePath: {
-            type: mongoose.Schema.Types.String,
-            required: true,
-        },
-        selfieImagePath: {
-            type: mongoose.Schema.Types.String,
-            required: true,
-        },
         isAccepted: {
             type: mongoose.Schema.Types.Boolean,
             required: true,

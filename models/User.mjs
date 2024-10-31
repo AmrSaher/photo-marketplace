@@ -52,7 +52,7 @@ const UserSchema = new mongoose.Schema(
         },
         postalCode: {
             type: mongoose.Schema.Types.String,
-        }
+        },
     },
     { timestamps: true }
 );

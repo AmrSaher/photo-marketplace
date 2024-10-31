@@ -4,6 +4,7 @@ import { generateOtp, sendOtpEmail } from "../utils/otp.mjs";
 import Transaction from "../models/Transaction.mjs";
 import { matchedData, validationResult } from "express-validator";
 import { getErrors } from "../utils/validation.mjs";
+import bcrypt from "bcryptjs";
 
 export const registerPage = (req, res) =>
     res.render("auth/register", { errors: {} });
@@ -34,7 +35,8 @@ export const register = async (req, res) => {
     res.redirect("/login");
 };
 
-export const loginPage = (req, res) => res.render("auth/login");
+export const loginPage = (req, res) =>
+    res.render("auth/login", { errorMessage: {} });
 
 export const logout = (req, res) => {
     req.logout((err) => res.redirect("/login"));
@@ -53,13 +55,7 @@ export const verifiyPage = async (req, res) => {
 };
 
 export const verifiy = async (req, res) => {
-    const validationErrors = validationResult(req);
-    if (!validationErrors.isEmpty()) {
-        const errors = getErrors(validationErrors);
-        return res.renderWithLayout("auth/verifiy-account", { errors });
-    }
-
-    const { otp } = matchedData(req);
+    const { otp } = req.body;
 
     if (otp != req.user.otp || req.user.otpExp < Date.now()) {
         return res.renderWithLayout("auth/verifiy-account", {
@@ -113,5 +109,56 @@ export const profilePage = async (req, res) => {
     for (let transaction of transactions) {
         balance += (transaction.type == "Income" ? 1 : -1) * transaction.amount;
     }
-    res.renderWithLayout("auth/profile", { user: req.user, balance });
+    res.renderWithLayout("auth/profile", {
+        user: req.user,
+        balance,
+        errors: {},
+    });
+};
+
+export const changePassword = async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        const errors = getErrors(validationErrors);
+        req.flash("error_msg", errors);
+        return res.redirect("/profile");
+    }
+
+    const data = matchedData(req);
+    const user = await User.findById(req.user.id);
+
+    const isMatch = await bcrypt.compare(
+        data.current_password,
+        req.user.password
+    );
+    if (!isMatch) {
+        req.flash("error_msg", "Current password is wrong.");
+        return res.redirect("/profile");
+    }
+
+    user.password = data.new_password;
+    await user.save();
+
+    req.flash("success_msg", "Password changed successfully!");
+    res.redirect("/profile");
+};
+
+export const editProfile = async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        const errors = getErrors(validationErrors);
+        req.flash("error_msg", errors);
+        return res.redirect("/profile");
+    }
+
+    const data = matchedData(req);
+
+    await User.findByIdAndUpdate(req.user.id, {
+        ...data,
+        postal_code: undefined,
+        postalCode: data.postal_code,
+    });
+
+    req.flash("success_msg", "Profile updated successfully!");
+    res.redirect("/profile");
 };

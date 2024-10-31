@@ -5,20 +5,24 @@ import User from "../models/User.mjs";
 export default (passport) => {
     passport.use(
         new LocalStrategy(
-            { usernameField: "email" },
-            async (email, password, done) => {
+            { usernameField: "email", passReqToCallback: true },
+            async (req, email, password, done) => {
                 // Match user
                 const user = await User.findOne({ email });
                 if (!user) {
-                    return done(null, false, {
-                        message: "That email is not registered",
+                    req.flash("error_msg", {
+                        email: "That email is not registered.",
                     });
+                    return done(null, false);
                 }
 
                 // Match password
                 const isMatch = await bcrypt.compare(password, user.password);
                 if (!isMatch) {
-                    return done(null, false, { message: "Password incorrect" });
+                    req.flash("error_msg", {
+                        password: "Password incorrect.",
+                    });
+                    return done(null, false);
                 }
 
                 return done(null, user);

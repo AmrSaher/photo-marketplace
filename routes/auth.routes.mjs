@@ -6,7 +6,8 @@ import upload from "../config/multer.mjs";
 import { checkSchema } from "express-validator";
 import {
     RegisterValidationSchema,
-    VerifiyAccountValidationSchema,
+    ChangePasswordValidationSchema,
+    EditProfileValidationSchema,
 } from "../validation/index.mjs";
 
 const router = Router();
@@ -46,7 +47,6 @@ router.post(
     "/verifiy-account",
     authenticated,
     notVerified,
-    checkSchema(VerifiyAccountValidationSchema),
     upload.fields([
         { name: "selfie", maxCount: 1 },
         { name: "front_national_id", maxCount: 1 },
@@ -57,5 +57,17 @@ router.post(
 
 // Profile
 router.get("/profile", authenticated, AuthController.profilePage);
+router.post(
+    "/change-password",
+    authenticated,
+    checkSchema(ChangePasswordValidationSchema),
+    AuthController.changePassword
+);
+router.put(
+    "/edit-profile",
+    authenticated,
+    checkSchema(EditProfileValidationSchema),
+    AuthController.editProfile
+);
 
 export default router;

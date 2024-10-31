@@ -1,5 +1,3 @@
-import { authenticated } from "../middlewares/index.mjs";
-import adminRoutes from "./admin.routes.mjs";
 import authRoutes from "./auth.routes.mjs";
 import photoRoutes from "./photo.routes.mjs";
 import walletRoutes from "./wallet.routes.mjs";
@@ -14,7 +12,6 @@ const __dirname = path.dirname(__filename);
 
 const router = Router();
 
-router.use("/admin", adminRoutes);
 router.use("/", authRoutes);
 router.use("/photos", photoRoutes);
 router.use("/wallet", walletRoutes);
@@ -24,17 +21,14 @@ router.get("/", async (req, res) => {
 
     const topPhotos = await Photo.aggregate([
         {
-            // Add a new field that contains the length of the owners array
             $addFields: {
                 ownersCount: { $size: "$owners" },
             },
         },
         {
-            // Sort by ownersCount in descending order
             $sort: { ownersCount: -1 },
         },
         {
-            // Limit the results to the top 3
             $limit: 3,
         },
     ]);

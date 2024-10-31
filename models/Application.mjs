@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./User.mjs";
 
 const ApplicationSchema = new mongoose.Schema(
     {
@@ -6,11 +7,6 @@ const ApplicationSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
-        },
-        isAccepted: {
-            type: mongoose.Schema.Types.Boolean,
-            required: true,
-            default: false,
         },
     },
     { timestamps: true }

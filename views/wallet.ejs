@@ -1,4 +1,35 @@
+<style>
+    /* Tooltip styling */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 200px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position above the icon */
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
 <script src="https://www.paypal.com/sdk/js?client-id=AewZJuwZugv-6QwBdc2hEx45ooMP3DVHf0MOsDHsneHF7N8lPFL7lgHMoVQFq8gDGZbZ72ADV7mBVr2U"></script>
+
 <!-- Top-Up Modal -->
 <div
     id="top-up-modal"
@@ -45,7 +76,27 @@
 >
     <div class="bg-white p-8 rounded-lg shadow-lg relative max-w-lg w-full">
         <div class="w-full flex items-center justify-between mb-4">
-            <h2 class="text-2xl font-bold">Withdraw</h2>
+            <h2 class="text-2xl font-bold flex items-center gap-1">
+                <p>Withdraw</p>
+                <span class="tooltip">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        x="0px"
+                        y="0px"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 30 30"
+                    >
+                        <path
+                            d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M16,21h-2v-7h2V21z M15,11.5 c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5S15.828,11.5,15,11.5z"
+                        ></path>
+                    </svg>
+                    <span class="tooltip-text text-sm"
+                        >A 20% fee will be deducted from the withdrawal
+                        amount.</span
+                    >
+                </span>
+            </h2>
             <button
                 onclick="toggleModal('withdraw-modal')"
                 class="text-gray-600 hover:text-gray-800 text-2xl"

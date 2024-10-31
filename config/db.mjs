@@ -3,4 +3,4 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_URI);
+await mongoose.connect(process.env.MONGO_URI);

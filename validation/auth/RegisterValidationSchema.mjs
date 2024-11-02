@@ -27,10 +27,15 @@ export default {
             },
         },
     },
-    address: {
+    phone_number: {
         notEmpty: {
-            errorMessage: "Address is required",
+            errorMessage: "Phone number is required.",
         },
+    },
+    country: {
+        optional: true,
+    },
+    address: {
         isLength: {
             options: { min: 5 },
             errorMessage: "Address should be at least 5 characters long",
@@ -38,9 +43,6 @@ export default {
         optional: true,
     },
     postal_code: {
-        notEmpty: {
-            errorMessage: "Postal Code is required",
-        },
         isPostalCode: {
             options: "any",
             errorMessage: "Please enter a valid Postal Code",

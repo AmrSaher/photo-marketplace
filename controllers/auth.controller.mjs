@@ -20,11 +20,11 @@ export const register = async (req, res) => {
 
     try {
         const user = new User({
-            name: data.name,
-            email: data.email,
-            password: data.password,
+            ...data,
+            postal_code: undefined,
+            password_confirmation: undefined,
             postalCode: data?.postal_code,
-            address: data?.address,
+            phoneNumber: data.phone_number,
         });
         await user.save();
     } catch (err) {

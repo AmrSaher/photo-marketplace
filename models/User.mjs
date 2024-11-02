@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema(
             required: true,
             unique: true,
         },
+        phoneNumber: {
+            type: mongoose.Schema.Types.String,
+            required: true,
+        },
         password: {
             type: mongoose.Schema.Types.String,
             required: true,
@@ -47,6 +51,9 @@ const UserSchema = new mongoose.Schema(
                 ref: "Photo",
             },
         ],
+        country: {
+            type: mongoose.Schema.Types.String,
+        },
         address: {
             type: mongoose.Schema.Types.String,
         },

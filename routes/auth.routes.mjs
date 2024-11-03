@@ -8,8 +8,8 @@ import {
     RegisterValidationSchema,
     ChangePasswordValidationSchema,
     EditProfileValidationSchema,
+    LoginValidationSchema,
 } from "../validation/index.mjs";
-import LoginValidationSchema from "../validation/auth/LoginValidationSchema.mjs";
 import { getErrors } from "../utils/validation.mjs";
 
 const router = Router();

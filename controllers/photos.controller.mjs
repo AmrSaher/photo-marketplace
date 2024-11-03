@@ -5,16 +5,33 @@ import path from "path";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
 import crypto from "crypto";
+import { matchedData, validationResult } from "express-validator";
+import { getErrors } from "../utils/validation.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const uploadPage = (req, res) => res.renderWithLayout("photos/upload");
+export const uploadPage = (req, res) =>
+    res.renderWithLayout("photos/upload", { errors: {} });
 
 export const upload = async (req, res) => {
-    const { title, description, price } = req.body;
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        const errors = getErrors(validationErrors);
 
-    const originalImagePath = req.file.path;
+        return res.renderWithLayout("photos/upload", { errors });
+    }
+
+    const { title, description, price } = matchedData(req);
+
+    const originalImagePath = req.file?.path;
+
+    if (!originalImagePath) {
+        return res.renderWithLayout("photos/upload", {
+            errors: { photo: "Photo file is required." },
+        });
+    }
+
     const watermarkImagePath = path.join(
         "uploads",
         crypto.randomInt(100000, 999999) + "-" + req.file.filename

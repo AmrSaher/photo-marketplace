@@ -7,6 +7,8 @@ import {
 } from "../middlewares/index.mjs";
 import upload from "../config/multer.mjs";
 import * as PhotosController from "../controllers/photos.controller.mjs";
+import { UploadPhotoValidationSchema } from "../validation/index.mjs";
+import { checkSchema } from "express-validator";
 
 const router = Router();
 
@@ -17,6 +19,7 @@ router.get("/upload", verified, PhotosController.uploadPage);
 router.post(
     "/upload",
     verified,
+    checkSchema(UploadPhotoValidationSchema),
     upload.single("photo"),
     PhotosController.upload
 );

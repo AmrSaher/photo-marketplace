@@ -36,7 +36,7 @@ export const register = async (req, res) => {
 };
 
 export const loginPage = (req, res) =>
-    res.render("auth/login", { errorMessage: {} });
+    res.render("auth/login", { errors: {} });
 
 export const logout = (req, res) => {
     req.logout((err) => res.redirect("/login"));

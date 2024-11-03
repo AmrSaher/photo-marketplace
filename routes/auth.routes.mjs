@@ -3,12 +3,14 @@ import passport from "passport";
 import { authenticated, guest, notVerified } from "../middlewares/index.mjs";
 import * as AuthController from "../controllers/auth.controller.mjs";
 import upload from "../config/multer.mjs";
-import { checkSchema } from "express-validator";
+import { checkSchema, validationResult } from "express-validator";
 import {
     RegisterValidationSchema,
     ChangePasswordValidationSchema,
     EditProfileValidationSchema,
 } from "../validation/index.mjs";
+import LoginValidationSchema from "../validation/auth/LoginValidationSchema.mjs";
+import { getErrors } from "../utils/validation.mjs";
 
 const router = Router();
 
@@ -26,6 +28,15 @@ router.get("/login", guest, AuthController.loginPage);
 router.post(
     "/login",
     guest,
+    checkSchema(LoginValidationSchema),
+    (req, res, next) => {
+        const validationErrors = validationResult(req);
+        if (!validationErrors.isEmpty()) {
+            const errors = getErrors(validationErrors);
+            return res.render("auth/login", { errors });
+        }
+        next();
+    },
     passport.authenticate("local", {
         successRedirect: "/",
         failureRedirect: "/login",

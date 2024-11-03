@@ -21,8 +21,8 @@
                         name="email"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
-                    <% if (errorMessage.email) { %>
-                    <p style="color: red"><%= errorMessage.email %></p>
+                    <% if (errors.email) { %>
+                    <p style="color: red"><%= errors.email %></p>
                     <% } %>
                 </div>
                 <div class="mb-4">
@@ -32,8 +32,8 @@
                         name="password"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
-                    <% if (errorMessage.password) { %>
-                    <p style="color: red"><%= errorMessage.password %></p>
+                    <% if (errors.password) { %>
+                    <p style="color: red"><%= errors.password %></p>
                     <% } %>
                 </div>
                 <button

@@ -6,17 +6,17 @@ import express from "express";
 import passport from "passport";
 import session from "express-session";
 import flash from "connect-flash";
-import passportLocalStrategy from "../config/passport.mjs";
-import routes from "../routes/index.mjs";
+import passportLocalStrategy from "./config/passport.mjs";
+import routes from "./routes/index.mjs";
 import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import ejs from "ejs";
-import "../config/db.mjs";
-import { admin as AdminMiddleware } from "../middlewares/index.mjs";
-import User from "../models/User.mjs";
+import "./config/db.mjs";
+import { admin as AdminMiddleware } from "./middlewares/index.mjs";
+import User from "./models/User.mjs";
 import mongoose from "mongoose";
-import { Components, componentLoader } from "../components.mjs";
+import { Components, componentLoader } from "./components.mjs";
 import methodOverride from "method-override";
 
 // Configrations
@@ -80,10 +80,10 @@ const admin = new AdminJS({
     ],
     componentLoader,
 });
-admin.watch();
+// admin.watch();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "..", "views"));
+app.set("views", path.join(__dirname, "views"));
 
 // Middlewares
 app.use(

@@ -1,44 +1,47 @@
 {
-  "name": "photo-marketplace",
-  "version": "1.0.0",
-  "main": "app.mjs",
-  "type": "module",
-  "scripts": {
-    "start": "node ./app.mjs",
-    "dev": "nodemon ./app.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@adminjs/express": "^6.1.0",
-    "@adminjs/mongoose": "^4.1.0",
-    "@paypal/checkout-server-sdk": "^1.0.3",
-    "adminjs": "^7.8.13",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.3",
-    "connect-flash": "^0.1.1",
-    "dotenv": "^16.4.5",
-    "ejs": "^3.1.10",
-    "express": "^4.21.1",
-    "express-formidable": "^1.2.0",
-    "express-session": "^1.18.1",
-    "express-validator": "^7.2.0",
-    "method-override": "^3.0.0",
-    "mongoose": "^8.7.2",
-    "multer": "^1.4.2",
-    "nodemailer": "^6.9.15",
-    "passport": "^0.7.0",
-    "passport-local": "^1.0.0",
-    "paypal-rest-sdk": "^1.8.1",
-    "react": "^18.3.1",
-    "sharp": "^0.33.5",
-    "twilio": "^5.3.4",
-    "uuid": "^10.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-  }
+    "name": "photo-marketplace",
+    "version": "1.0.0",
+    "main": "app.mjs",
+    "type": "module",
+    "scripts": {
+        "start": "node ./app.mjs",
+        "dev": "nodemon ./app.mjs",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "@adminjs/express": "^6.1.0",
+        "@adminjs/mongoose": "^4.1.0",
+        "@paypal/checkout-server-sdk": "^1.0.3",
+        "adminjs": "^7.8.13",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.20.3",
+        "connect-flash": "^0.1.1",
+        "dotenv": "^16.4.5",
+        "ejs": "^3.1.10",
+        "express": "^4.21.1",
+        "express-formidable": "^1.2.0",
+        "express-session": "^1.18.1",
+        "express-validator": "^7.2.0",
+        "method-override": "^3.0.0",
+        "mongoose": "^8.7.2",
+        "multer": "^1.4.2",
+        "nodemailer": "^6.9.15",
+        "passport": "^0.7.0",
+        "passport-local": "^1.0.0",
+        "paypal-rest-sdk": "^1.8.1",
+        "react": "^18.3.1",
+        "sharp": "^0.33.5",
+        "twilio": "^5.3.4",
+        "uuid": "^10.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.7"
+    },
+    "resolutions": {
+        "rollup": "npm:@rollup/wasm-node"
+    }
 }

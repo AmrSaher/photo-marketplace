@@ -35,8 +35,7 @@ export const register = async (req, res) => {
     res.redirect("/login");
 };
 
-export const loginPage = (req, res) =>
-    res.render("auth/login", { errors: {} });
+export const loginPage = (req, res) => res.render("auth/login", { errors: {} });
 
 export const logout = (req, res) => {
     req.logout((err) => res.redirect("/login"));
@@ -44,12 +43,15 @@ export const logout = (req, res) => {
 
 export const verifiyPage = async (req, res) => {
     const otp = generateOtp();
+    const otpExp = new Date(Date.now() + 10 * 60 * 1000);
 
-    await User.findByIdAndUpdate(req.user._id, {
-        otp,
-        otpExp: new Date(Date.now() + 10 * 60 * 1000),
-    });
-    // await sendOtpEmail(req.user.email, otp);
+    if (!req.user.otp || req.user.otpExp < Date.now()) {
+        await User.findByIdAndUpdate(req.user._id, {
+            otp,
+            otpExp,
+        });
+        sendOtpEmail(req.user.email, otp);
+    }
 
     res.renderWithLayout("auth/verifiy-account", { errors: {} });
 };

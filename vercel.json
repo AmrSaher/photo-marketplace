@@ -2,6 +2,6 @@
     "version": 2,
     "rewrites": [{ "source": "/(.*)", "destination": "/api/index.mjs" }],
     "build": {
-        "command": "rm -rf node_modules package-lock.json && npm install"
+        "command": "rm -rf node_modules package-lock.json && npm i"
     }
 }

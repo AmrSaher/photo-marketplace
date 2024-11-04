@@ -6,6 +6,7 @@
     "scripts": {
         "start": "node ./app.mjs",
         "dev": "nodemon ./app.mjs",
+        "prebuild": "rm -rf node_modules package-lock.json && npm install",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
@@ -40,9 +41,6 @@
     },
     "devDependencies": {
         "nodemon": "^3.1.7"
-    },
-    "optionalDependencies": {
-        "@rollup/rollup": "*"
     },
     "engines": {
         "node": "20.x"

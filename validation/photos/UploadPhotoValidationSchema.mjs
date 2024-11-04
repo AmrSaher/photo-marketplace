@@ -15,9 +15,9 @@ export default {
         },
     },
     price: {
-        isNumber: {
-            options: { min: 0 },
-            errorMessage: "Price must be a positive number.",
-        },
+        // isNumber: {
+        //     options: { min: 0 },
+        //     errorMessage: "Price must be a positive number.",
+        // },
     },
 };

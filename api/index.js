@@ -6,18 +6,18 @@ import express from "express";
 import passport from "passport";
 import session from "express-session";
 import flash from "connect-flash";
-import passportLocalStrategy from "./config/passport.mjs";
-import routes from "./routes/index.mjs";
+import passportLocalStrategy from "../config/passport.mjs";
+import routes from "../routes/index.mjs";
 import bodyParser from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import ejs from "ejs";
-import "./config/db.mjs";
-import { admin as AdminMiddleware } from "./middlewares/index.mjs";
-import User from "./models/User.mjs";
+import "../config/db.mjs";
+import { admin as AdminMiddleware } from "../middlewares/index.mjs";
+import User from "../models/User.mjs";
 import mongoose from "mongoose";
-import { Components, componentLoader } from "./components.mjs";
-import methodOverride from 'method-override';
+import { Components, componentLoader } from "../components.mjs";
+import methodOverride from "method-override";
 
 // Configrations
 dotenv.config();
@@ -83,7 +83,7 @@ const admin = new AdminJS({
 admin.watch();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "..", "views"));
 
 // Middlewares
 app.use(
@@ -139,14 +139,15 @@ const adminRouter = AdminJSExpress.buildRouter(admin);
 
 app.use(admin.options.rootPath, AdminMiddleware, adminRouter);
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 app.use(routes);
 
-export default app;
-// const PORT = process.env.PORT || 5000;
+// const PORT = 3000;
 // app.listen(PORT, () => {
 //     console.log(`Server running on http://localhost:${PORT}`);
 //     console.log(
 //         `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
 //     );
 // });
+
+export default app;

@@ -41,7 +41,10 @@
     "devDependencies": {
         "nodemon": "^3.1.7"
     },
-    "resolutions": {
-        "rollup": "npm:@rollup/wasm-node"
+    "optionalDependencies": {
+        "@rollup/rollup": "*"
+    },
+    "engines": {
+        "node": "20.x"
     }
 }

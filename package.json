@@ -1,11 +1,11 @@
 {
     "name": "photo-marketplace",
     "version": "1.0.0",
-    "main": "app.cjs",
+    "main": "app.mjs",
     "type": "module",
     "scripts": {
-        "start": "node ./app.cjs",
-        "dev": "nodemon ./app.cjs",
+        "start": "node ./app.mjs",
+        "dev": "nodemon ./app.mjs",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],

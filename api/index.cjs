@@ -1,3 +1,5 @@
-const app = require("../app.mjs");
-
+let app;
+(async () => {
+    app = await import("../app.mjs");
+})();
 export default app;

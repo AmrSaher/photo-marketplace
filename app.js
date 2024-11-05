@@ -13,10 +13,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import ejs from "ejs";
 import "./config/db.mjs";
-import { admin as AdminMiddleware } from "./middlewares/index.mjs";
-import User from "./models/User.mjs";
-import mongoose from "mongoose";
-import { Components, componentLoader } from "./components.mjs";
+// import { admin as AdminMiddleware } from "./middlewares/index.mjs";
+// import User from "./models/User.mjs";
+// import mongoose from "mongoose";
+// import { Components, componentLoader } from "./components.mjs";
 import methodOverride from "method-override";
 
 // Configrations

@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
-import AdminJS from "adminjs";
-import AdminJSExpress from "@adminjs/express";
-import * as AdminJSMongoose from "@adminjs/mongoose";
+// import AdminJS from "adminjs";
+// import AdminJSExpress from "@adminjs/express";
+// import * as AdminJSMongoose from "@adminjs/mongoose";
 import passport from "passport";
 import session from "express-session";
 import flash from "connect-flash";
@@ -22,65 +22,65 @@ import methodOverride from "method-override";
 // Configrations
 dotenv.config();
 passportLocalStrategy(passport);
-AdminJS.registerAdapter({
-    Resource: AdminJSMongoose.Resource,
-    Database: AdminJSMongoose.Database,
-});
+// AdminJS.registerAdapter({
+//     Resource: AdminJSMongoose.Resource,
+//     Database: AdminJSMongoose.Database,
+// });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const admin = new AdminJS({
-    databases: [mongoose],
-    resources: [
-        {
-            resource: User,
-            options: {
-                properties: {
-                    selfieImagePath: {
-                        isVisible: {
-                            list: true,
-                            filter: true,
-                            show: true,
-                            edit: true,
-                        },
-                        components: {
-                            list: Components.SelfieImageComponent,
-                            show: Components.SelfieImageComponent,
-                        },
-                    },
-                    frontNationalIdImagePath: {
-                        isVisible: {
-                            list: true,
-                            filter: true,
-                            show: true,
-                            edit: true,
-                        },
-                        components: {
-                            list: Components.FIDImageComponent,
-                            show: Components.FIDImageComponent,
-                        },
-                    },
-                    backNationalIdImagePath: {
-                        isVisible: {
-                            list: true,
-                            filter: true,
-                            show: true,
-                            edit: true,
-                        },
-                        components: {
-                            list: Components.BIDImageComponent,
-                            show: Components.BIDImageComponent,
-                        },
-                    },
-                },
-            },
-        },
-    ],
-    componentLoader,
-});
-admin.watch();
+// const admin = new AdminJS({
+//     databases: [mongoose],
+//     resources: [
+//         {
+//             resource: User,
+//             options: {
+//                 properties: {
+//                     selfieImagePath: {
+//                         isVisible: {
+//                             list: true,
+//                             filter: true,
+//                             show: true,
+//                             edit: true,
+//                         },
+//                         components: {
+//                             list: Components.SelfieImageComponent,
+//                             show: Components.SelfieImageComponent,
+//                         },
+//                     },
+//                     frontNationalIdImagePath: {
+//                         isVisible: {
+//                             list: true,
+//                             filter: true,
+//                             show: true,
+//                             edit: true,
+//                         },
+//                         components: {
+//                             list: Components.FIDImageComponent,
+//                             show: Components.FIDImageComponent,
+//                         },
+//                     },
+//                     backNationalIdImagePath: {
+//                         isVisible: {
+//                             list: true,
+//                             filter: true,
+//                             show: true,
+//                             edit: true,
+//                         },
+//                         components: {
+//                             list: Components.BIDImageComponent,
+//                             show: Components.BIDImageComponent,
+//                         },
+//                     },
+//                 },
+//             },
+//         },
+//     ],
+//     componentLoader,
+// });
+// admin.watch();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -135,9 +135,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
-const adminRouter = AdminJSExpress.buildRouter(admin);
+// const adminRouter = AdminJSExpress.buildRouter(admin);
 
-app.use(admin.options.rootPath, AdminMiddleware, adminRouter);
+// app.use(admin.options.rootPath, AdminMiddleware, adminRouter);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(routes);

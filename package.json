@@ -13,10 +13,7 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "@adminjs/express": "^6.1.0",
-        "@adminjs/mongoose": "^4.1.0",
         "@paypal/checkout-server-sdk": "^1.0.3",
-        "adminjs": "^7.8.13",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.3",
         "connect-flash": "^0.1.1",

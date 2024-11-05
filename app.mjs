@@ -30,7 +30,7 @@ AdminJS.registerAdapter({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
+export const app = express();
 const admin = new AdminJS({
     databases: [mongoose],
     resources: [
@@ -149,5 +149,3 @@ app.listen(PORT, () => {
         `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
     );
 });
-
-export default app;

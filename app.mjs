@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import express from "express";
 import AdminJS from "adminjs";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
@@ -29,7 +30,6 @@ AdminJS.registerAdapter({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const express = require("express");
 const app = express();
 const admin = new AdminJS({
     databases: [mongoose],

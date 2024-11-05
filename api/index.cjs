@@ -1,3 +1,3 @@
-import app from "../app.mjs";
+const app = require("../app.mjs");
 
 export default app;

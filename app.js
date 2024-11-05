@@ -142,12 +142,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(routes);
 
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log(
-        `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
-    );
-});
+// const PORT = 3000;
+// app.listen(PORT, () => {
+//     console.log(`Server running on http://localhost:${PORT}`);
+//     console.log(
+//         `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
+//     );
+// });
 
 export default app;

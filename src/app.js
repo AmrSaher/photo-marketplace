@@ -83,7 +83,7 @@ const app = express();
 // admin.watch();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "..", "views"));
 
 // Middlewares
 app.use(
@@ -104,13 +104,11 @@ app.use((req, res, next) => {
     next();
 });
 app.use((req, res, next) => {
-    res.renderWithLayout = (view, options = {}, layout = "user") => {
+    res.renderWithLayout = (view, options = {}) => {
         ejs.renderFile(`views/${view}.ejs`, options, (err, html) => {
             if (err) return next(err);
             ejs.renderFile(
-                layout == "user"
-                    ? "views/layouts/main.ejs"
-                    : "views/layouts/admin.ejs",
+                "views/layouts/main.ejs",
                 {
                     ...options,
                     body: html,
@@ -145,9 +143,9 @@ app.use(routes);
 // const PORT = 3000;
 // app.listen(PORT, () => {
 //     console.log(`Server running on http://localhost:${PORT}`);
-//     console.log(
-//         `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
-//     );
+//     // console.log(
+//     //     `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
+//     // );
 // });
 
 export default app;

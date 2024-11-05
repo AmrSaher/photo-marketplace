@@ -149,3 +149,5 @@ app.listen(PORT, () => {
         `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
     );
 });
+
+export default app;

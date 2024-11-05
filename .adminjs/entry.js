@@ -1,7 +1,7 @@
 AdminJS.UserComponents = {}
-import SelfieImageComponent from '../components/SelfieImageComponent'
+import SelfieImageComponent from '../src/components/SelfieImageComponent'
 AdminJS.UserComponents.SelfieImageComponent = SelfieImageComponent
-import FIDImageComponent from '../components/FIDImageComponent'
+import FIDImageComponent from '../src/components/FIDImageComponent'
 AdminJS.UserComponents.FIDImageComponent = FIDImageComponent
-import BIDImageComponent from '../components/BIDImageComponent'
+import BIDImageComponent from '../src/components/BIDImageComponent'
 AdminJS.UserComponents.BIDImageComponent = BIDImageComponent

@@ -3,3 +3,4 @@ uploads
 template
 package-lock.json
 .env
+.vercel

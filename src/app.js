@@ -140,7 +140,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(routes);
 
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(
@@ -148,4 +148,4 @@ app.listen(PORT, () => {
     );
 });
 
-export default app;
+// export default app;
